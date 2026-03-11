@@ -82,8 +82,6 @@ model = DenoisingAutoencoder().to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Print model summary
-summary(model, input_size=(1, 28, 28))
 
 # Training Function
 def train(model, loader, criterion, optimizer, epochs=5):
@@ -104,48 +102,7 @@ def train(model, loader, criterion, optimizer, epochs=5):
             running_loss += loss.item()
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {running_loss/len(loader):.4f}")
 
-# Evaluate and visualize
-def visualize_denoising(model, loader, num_images=10):
-    model.eval()
-    with torch.no_grad():
-        for images, _ in loader:
-            images = images.to(device)
-            noisy_images = add_noise(images).to(device)
-            outputs = model(noisy_images)
-            break
 
-    images = images.cpu().numpy()
-    noisy_images = noisy_images.cpu().numpy()
-    outputs = outputs.cpu().numpy()
-
-    print("Name: NARESH.R")
-    print("Register Number: 212223240104")
-    plt.figure(figsize=(18, 6))
-    for i in range(num_images):
-        # Original
-        ax = plt.subplot(3, num_images, i + 1)
-        plt.imshow(images[i].squeeze(), cmap='gray')
-        ax.set_title("Original")
-        plt.axis("off")
-
-        # Noisy
-        ax = plt.subplot(3, num_images, i + 1 + num_images)
-        plt.imshow(noisy_images[i].squeeze(), cmap='gray')
-        ax.set_title("Noisy")
-        plt.axis("off")
-
-        # Denoised
-        ax = plt.subplot(3, num_images, i + 1 + 2 * num_images)
-        plt.imshow(outputs[i].squeeze(), cmap='gray')
-        ax.set_title("Denoised")
-        plt.axis("off")
-
-    plt.tight_layout()
-    plt.show()
-
-# Run training and visualization
-train(model, train_loader, criterion, optimizer, epochs=5)
-visualize_denoising(model, test_loader)
 ```
 
 ## OUTPUT
